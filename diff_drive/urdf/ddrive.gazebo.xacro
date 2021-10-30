@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<robot name="ddrive" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:property name="ddriveyaml" value="$(find diff_drive)/config/ddrive.yaml" />
+<xacro:property name="ddrive" value="${load_yaml(ddriveyaml)}"/>
+<xacro:property name="L" value="${ddrive['L']}" />
+<xacro:property name="H" value="${ddrive['H']}" />
+<xacro:property name="W" value="${ddrive['W']}" />
+<xacro:property name="R1" value="${ddrive['R1']}" />
+<xacro:property name="L1" value="${ddrive['L1']}" />
+<xacro:property name="R2" value="${ddrive['R2']}" />
+<xacro:property name="L2" value="${ddrive['L2']}" />
+
+<gazebo reference="base_link">
+  <material>Gazebo/Blue</material>
+</gazebo>
+
+<gazebo reference="left_wheel">
+  <material>Gazebo/Green</material>
+  <mu1>999</mu1>
+  <mu2>999</mu2>
+  <kp>500000.0</kp>
+  <kd>10.0</kd>
+  <minDepth>0.001</minDepth>
+  <!-- <maxVel>0.1</maxVel> -->
+  <fdir1>1 0 0</fdir1>
+</gazebo>
+
+<gazebo reference="right_wheel">
+  <material>Gazebo/Green</material>
+  <mu1>999</mu1>
+  <mu2>999</mu2>
+  <kp>500000.0</kp>
+  <kd>10.0</kd>
+  <minDepth>0.001</minDepth>
+  <!-- <maxVel>0.1</maxVel> -->
+  <fdir1>1 0 0</fdir1>
+</gazebo>
+
+<gazebo reference="top_caster">
+  <material>Gazebo/Red</material>
+  <mu1>0</mu1>
+  <mu2>0</mu2>
+  <kp>500000.0</kp>
+  <kd>10.0</kd>
+  <minDepth>0.001</minDepth>
+  <!-- <maxVel>0.1</maxVel> -->
+  <fdir1>1 0 0</fdir1>
+
+</gazebo>
+
+<gazebo reference="bottom_caster">
+  <material>Gazebo/Red</material>
+  <mu1>0</mu1>
+  <mu2>0</mu2>
+  <kp>500000.0</kp>
+  <kd>10.0</kd>
+  <minDepth>0.001</minDepth>
+  <!-- <maxVel>0.1</maxVel> -->
+  <fdir1>1 0 0</fdir1>
+</gazebo>
+
+<gazebo>
+<plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+<rosDebugLevel>na</rosDebugLevel>
+<alwaysOn>true</alwaysOn>
+<updateRate>100</updateRate>
+<leftJoint>left_wheel</leftJoint>
+<rightJoint>right_wheel</rightJoint>
+<wheelSeparation>${W+L1}</wheelSeparation>
+<wheelDiameter>${R1}</wheelDiameter>
+<wheelTorque>20</wheelTorque>
+<commandTopic>diff/cmd_vel</commandTopic>
+<odometryTopic>diff/odom</odometryTopic>
+<odometryFrame>odom</odometryFrame>
+<robotBaseFrame>base_link</robotBaseFrame>
+<publishWheelTF>false</publishWheelTF>
+<publishOdomTF>true</publishOdomTF>
+<publishWheelJointState>true</publishWheelJointState>
+<wheelAcceleration>false</wheelAcceleration>
+<odometrySource>world</odometrySource>
+<publishTf>1</publishTf>
+</plugin>
+</gazebo>
+
+
+</robot>
