@@ -1,0 +1,29 @@
+<launch>
+
+<!-- <arg name="mode" default="sim"/> -->
+
+  <!-- load the yaml parameters -->
+  <rosparam command="load" file="$(find diff_drive)/config/ddrive.yaml"/>
+
+  <!-- load the urdf into the parameter server -->
+  <param name="robot_description" command ="$(find xacro)/xacro $(find diff_drive)/urdf/ddrive.urdf.xacro" />
+
+  <!-- The robot_state_publisher reads the urdf from /robot_description parameter
+       and listens to joint information on the /joint_states topic -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+  <!-- rviz will enable us to see the robot -->
+  <!-- <node name="rviz" pkg="rviz" type="rviz"/> -->
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+  <arg name="world_name" value="$(find diff_drive)/worlds/ddrive.world" />
+  <arg name="paused" value="true" />
+  </include>
+
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
+     args="-urdf -param robot_description -model ddrive -z 0.5" />
+
+  <node name="flip" pkg="diff_drive" type="flip"/>
+
+</launch>

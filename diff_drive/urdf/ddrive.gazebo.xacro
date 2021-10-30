@@ -11,7 +11,7 @@
 <xacro:property name="R2" value="${ddrive['R2']}" />
 <xacro:property name="L2" value="${ddrive['L2']}" />
 
-<gazebo reference="base_link">
+<gazebo reference="body">
   <material>Gazebo/Blue</material>
 </gazebo>
 

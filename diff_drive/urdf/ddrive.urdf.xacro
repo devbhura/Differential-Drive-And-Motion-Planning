@@ -17,7 +17,16 @@
 <xacro:property name="m_caster" value="0.4" />
 
 
-<link name="base_link" >
+<link name="base_link"/>
+
+<joint name="dummy" type = "fixed">
+  <origin xyz="0 0 0" rpy="0 0 0" />
+  <parent link="base_link" />
+  <child link="body" />
+</joint>
+
+<link name="body" >
+  <origin xyz="0 0 0" rpy="0 0 0" /> 
   <visual>
     <geometry>
       <box size="${L} ${W} ${H}" />
@@ -51,7 +60,7 @@
 <joint name="left_wheel_joint" type="continuous">
   <origin xyz="${L/2} ${W/2 + L1/2} 0" rpy="${-pi/2} 0 0" />
   <axis xyz =" 0 0 1"/>
-  <parent link="base_link" />
+  <parent link="body" />
   <child link="left_wheel" />
 </joint>
 
@@ -87,7 +96,7 @@
 <joint name="right_wheel_joint" type="continuous">
   <origin xyz="${L/2} ${-W/2 - L1/2} 0" rpy="${-pi/2} 0 0" />
   <axis xyz =" 0 0 1"/>
-  <parent link="base_link" />
+  <parent link="body" />
   <child link="right_wheel" />
 </joint>
 
@@ -124,7 +133,7 @@
 <joint name="top_caster_joint" type="continuous">
   <origin xyz="${-L/2 + R2/2} 0 ${H/2 + R2}" rpy="${-pi/2} 0 0" />
   <axis xyz =" 0 0 1"/>
-  <parent link="base_link" />
+  <parent link="body" />
   <child link="top_caster" />
 </joint>
 
@@ -160,7 +169,7 @@
 <joint name="bottom_caster_joint" type="continuous">
   <origin xyz="${-L/2 + R2/2} 0 ${-H/2 - R2}" rpy="${-pi/2} 0 0" />
   <axis xyz =" 0 0 1"/>
-  <parent link="base_link" />
+  <parent link="body" />
   <child link="bottom_caster" />
 </joint>
 

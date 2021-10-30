@@ -1,0 +1,38 @@
+#!/usr/bin/env python
+
+"""
+Makes the robot move forward and backwards and flip
+
+Publishers: 
+
+
+Subscribers:
+"""
+
+import rospy 
+from geometry_msgs.msg import Twist, Vector3
+
+class Flip():
+
+    def __init__(self):
+
+        # Publishes to diff/cmd_vel
+        self.wheel_pub = rospy.Publisher("diff/cmd_vel", Twist, queue_size = 10)
+        self.rate = rospy.Rate(100)
+        self.v = 3
+
+        while not rospy.is_shutdown():
+            self.wheel_pub.publish(Twist(linear = Vector3(self.v,0,0), angular =  Vector3(0,0,0)))
+
+
+
+def main():
+    rospy.init_node("Flip")
+    Flip()
+    rospy.spin()
+
+if __name__ == "__main__":
+    try:
+        main()
+    except rospy.ROSInterruptException:
+        pass
