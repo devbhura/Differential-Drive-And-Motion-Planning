@@ -12,11 +12,12 @@
        and listens to joint information on the /joint_states topic -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+  <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/> -->
+  <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui"/>
   <!-- rviz will enable us to see the robot -->
-  <!-- <node name="rviz" pkg="rviz" type="rviz"/> -->
+  <node name="rviz" pkg="rviz" type="rviz"/>
 
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+  <!-- <include file="$(find gazebo_ros)/launch/empty_world.launch">
   <arg name="world_name" value="$(find diff_drive)/worlds/ddrive.world" />
   <arg name="paused" value="true" />
   </include>
@@ -24,6 +25,6 @@
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
      args="-urdf -param robot_description -model ddrive -z 0.5" />
 
-  <node name="flip" pkg="diff_drive" type="flip"/>
+  <node name="flip" pkg="diff_drive" type="flip"/> -->
 
 </launch>

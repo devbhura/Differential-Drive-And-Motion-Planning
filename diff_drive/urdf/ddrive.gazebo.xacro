@@ -39,8 +39,8 @@
 
 <gazebo reference="top_caster">
   <material>Gazebo/Red</material>
-  <mu1>0</mu1>
-  <mu2>0</mu2>
+  <mu1>1</mu1>
+  <mu2>1</mu2>
   <kp>500000.0</kp>
   <kd>10.0</kd>
   <minDepth>0.001</minDepth>
@@ -51,8 +51,8 @@
 
 <gazebo reference="bottom_caster">
   <material>Gazebo/Red</material>
-  <mu1>0</mu1>
-  <mu2>0</mu2>
+  <mu1>1</mu1>
+  <mu2>1</mu2>
   <kp>500000.0</kp>
   <kd>10.0</kd>
   <minDepth>0.001</minDepth>
@@ -65,8 +65,8 @@
 <rosDebugLevel>na</rosDebugLevel>
 <alwaysOn>true</alwaysOn>
 <updateRate>100</updateRate>
-<leftJoint>left_wheel</leftJoint>
-<rightJoint>right_wheel</rightJoint>
+<leftJoint>right_wheel</leftJoint>
+<rightJoint>left_wheel</rightJoint>
 <wheelSeparation>${W+L1}</wheelSeparation>
 <wheelDiameter>${R1}</wheelDiameter>
 <wheelTorque>20</wheelTorque>
