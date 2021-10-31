@@ -1,6 +1,6 @@
 <launch>
 
-  <arg name="robot_model"                       default=""/>
+  <arg name="robot_model"                       default="px100"/>
   <arg name="robot_name"                        default="$(arg robot_model)"/>
   <arg name="base_link_frame"                   default="base_link"/>
   <arg name="show_ar_tag"                       default="false"/>
@@ -22,13 +22,14 @@
   <env name="GAZEBO_RESOURCE_PATH"              value="$(find interbotix_xsarm_gazebo)"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name"                        value="$(arg world_name)"/>
+    <arg name="world_name"                        value="$(find arm_move)/worlds/realsense_box.world"/>
     <arg name="gui"                               value="$(arg gui)" />
     <arg name="debug"                             value="$(arg debug)" />
     <arg name="paused"                            value="$(arg paused)"/>
     <arg name="recording"                         value="$(arg recording)"/>
     <arg name="use_sim_time"                      value="$(arg use_sim_time)"/>
   </include>
+  
 
   <group if="$(arg use_trajectory_controllers)">
 

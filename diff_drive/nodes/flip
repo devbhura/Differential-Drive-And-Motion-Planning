@@ -17,7 +17,7 @@ class Flip():
     def __init__(self):
 
         # Publishes to diff/cmd_vel
-        self.wheel_pub = rospy.Publisher("/diff/cmd_vel", Twist, queue_size = 10)
+        self.wheel_pub = rospy.Publisher("diff/cmd_vel", Twist, queue_size = 10)
         self.rate = rospy.Rate(100)
         self.v = 3
 
