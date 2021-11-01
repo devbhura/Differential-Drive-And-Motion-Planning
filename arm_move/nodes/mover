@@ -1,0 +1,163 @@
+#!/usr/bin/env python
+
+"""
+Subscriber:
+
+Publisher:
+
+Services:
+follow
+reset
+step
+
+"""
+
+import sys
+import copy
+import rospy
+import moveit_commander
+import moveit_msgs.msg
+import os
+
+from geometry_msgs.msg import PoseStamped, Point, Pose
+from moveit_msgs.msg import MoveItErrorCodes
+from std_srvs.srv import Empty, EmptyResponse
+from arm_move.srv import step
+
+class Mover():
+
+    def __init__(self):
+
+        # self.waypoints = rospy.get_param()
+
+        moveit_commander.roscpp_initialize(sys.argv)
+
+        self.robot = moveit_commander.RobotCommander()
+
+        self.scene = moveit_commander.PlanningSceneInterface()
+
+        self.move_group = moveit_commander.MoveGroupCommander("interbotix_arm")
+
+        self.gripper_group = moveit_commander.MoveGroupCommander("interbotix_gripper")
+
+        self.follow = rospy.Service("follow",Empty,self.follow_callback)
+        self.reset = rospy.Service("reset", Empty, self.reset_callback)
+        self.step = rospy.Service("step",step,self.step_callback)
+
+        self.addtable()
+
+        
+
+    def wait_for_state_update(self, box_is_known=False, box_is_attached=False, timeout=4):
+    # Copy class variables to local variables to make the web tutorials more clear.
+    # In practice, you should use the class variables directly unless you have a good
+    # reason not to.
+        box_name = self.box_name
+        scene = self.scene
+        start = rospy.get_time()
+        seconds = rospy.get_time()
+        while (seconds - start < timeout) and not rospy.is_shutdown():
+            # Test if the box is in attached objects
+            attached_objects = scene.get_attached_objects([box_name])
+            is_attached = len(attached_objects.keys()) > 0
+
+            # Test if the box is in the scene.
+            # Note that attaching the box will remove it from known_objects
+            is_known = box_name in scene.get_known_object_names()
+
+            # Test if we are in the expected state
+            if (box_is_attached == is_attached) and (box_is_known == is_known):
+                return True
+
+            # Sleep so that we give other threads time on the processor
+            rospy.sleep(0.1)
+            seconds = rospy.get_time()
+
+            # If we exited the while loop without returning then we timed out
+            return False
+
+
+    def addtable(self):
+
+        rospy.sleep(3)
+        self.box_pose = PoseStamped()
+        self.box_pose.header.frame_id = "world"
+        self.box_pose.pose.orientation.w = 1.0
+        self.box_pose.pose.position.x = 0.0
+        self.box_pose.pose.position.y = 0.0
+        self.box_pose.pose.position.z = -0.01  # above the world frame
+        self.box_name = "table"
+
+        while not self.wait_for_state_update(box_is_known = True):
+            self.scene.add_box(self.box_name, self.box_pose, size=(0.5, 0.5, 0.01))
+
+    def addbox(self):
+
+        rospy.sleep(3)
+        self.box_pose = PoseStamped()
+        self.box_pose.header.frame_id = "world"
+        self.box_pose.pose.orientation.w = 1.0
+        self.box_pose.pose.position.x = 0.2
+        self.box_pose.pose.position.y = 0.0
+        self.box_pose.pose.position.z = 0.05  # above the world frame
+        self.box_name = "box"
+
+        while not self.wait_for_state_update(box_is_known = True):
+            self.scene.add_box(self.box_name, self.box_pose, size=(0.1, 0.1, 0.1))
+
+    def follow_callback(self):
+
+
+        return EmptyResponse()
+    
+    def reset_callback(self, timeout=4):
+
+        # adds the box to the scene
+        self.addbox()
+
+        # makes the robot go to its home position
+        self.move_group.set_named_target('Home')
+        self.move_group.go()
+
+        self.waypoints = []
+
+        return EmptyResponse()
+
+    
+    def step_callback(self, req):
+
+        x = req.point.x
+        y = req.point.y
+        z = req.point.z
+        xyz = [x,y,z]
+        self.move_group.set_position_target(xyz)
+
+        
+
+        [err, plan_msg, plan_time, error_code] = self.move_group.plan()
+        
+        if error_code.val == 1:
+
+            self.move_group.execute(plan_msg,wait='true')
+            self.move_group.go(wait='true')
+            self.waypoints.append(xyz)
+            if req.gripper:
+                self.gripper_group.set_named_target('Open')
+            else:
+                self.gripper_group.set_named_target(' Closed')
+
+        
+
+        return error_code
+
+
+def main():
+    rospy.init_node("Mover")
+    Mover()
+    rospy.spin()
+
+if __name__ == "__main__":
+    try:
+        main()
+    except rospy.ROSInterruptException:
+        pass

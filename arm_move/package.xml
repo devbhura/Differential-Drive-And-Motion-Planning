@@ -53,6 +53,14 @@
   <exec_depend>gazebo_ros</exec_depend>
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>interbotix_xsarm_descriptions</exec_depend>
+  <exec_depend>interbotix_xsarm_moveit</exec_depend>
+  <exec_depend>interbotix_xsarm_ros_control</exec_depend>
+  <exec_depend>message_runtime</exec_depend>
+  <build_depend>moveit_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>message_generation</build_depend>
+  <build_export_depend>moveit_msgs</build_export_depend>
+  <build_export_depend>geometry_msgs</build_export_depend>
   
   <!-- The export tag contains other, unspecified, tags -->
   <export>
