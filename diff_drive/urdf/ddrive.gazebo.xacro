@@ -16,7 +16,7 @@
 </gazebo>
 
 <gazebo reference="left_wheel">
-  <material>Gazebo/Green</material>
+  <material>Gazebo/Wood</material>
   <mu1>999</mu1>
   <mu2>999</mu2>
   <kp>500000.0</kp>
@@ -27,7 +27,7 @@
 </gazebo>
 
 <gazebo reference="right_wheel">
-  <material>Gazebo/Green</material>
+  <material>Gazebo/Wood</material>
   <mu1>999</mu1>
   <mu2>999</mu2>
   <kp>500000.0</kp>
@@ -61,26 +61,26 @@
 </gazebo>
 
 <gazebo>
-<plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
-<rosDebugLevel>na</rosDebugLevel>
-<alwaysOn>true</alwaysOn>
-<updateRate>100</updateRate>
-<leftJoint>right_wheel</leftJoint>
-<rightJoint>left_wheel</rightJoint>
-<wheelSeparation>${W+L1}</wheelSeparation>
-<wheelDiameter>${R1}</wheelDiameter>
-<wheelTorque>20</wheelTorque>
-<commandTopic>diff/cmd_vel</commandTopic>
-<odometryTopic>diff/odom</odometryTopic>
-<odometryFrame>odom</odometryFrame>
-<robotBaseFrame>base_link</robotBaseFrame>
-<publishWheelTF>false</publishWheelTF>
-<publishOdomTF>true</publishOdomTF>
-<publishWheelJointState>true</publishWheelJointState>
-<wheelAcceleration>false</wheelAcceleration>
-<odometrySource>world</odometrySource>
-<publishTf>1</publishTf>
-</plugin>
+  <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+  <rosDebugLevel>na</rosDebugLevel>
+  <alwaysOn>true</alwaysOn>
+  <updateRate>100</updateRate>
+  <leftJoint>right_wheel_joint</leftJoint>
+  <rightJoint>left_wheel_joint</rightJoint>
+  <wheelSeparation>${W+L1}</wheelSeparation>
+  <wheelDiameter>${R1*2}</wheelDiameter>
+  <wheelTorque>20</wheelTorque>
+  <commandTopic>diff/cmd_vel</commandTopic>
+  <odometryTopic>diff/odom</odometryTopic>
+  <odometryFrame>odom</odometryFrame>
+  <robotBaseFrame>base_link</robotBaseFrame>
+  <publishWheelTF>false</publishWheelTF>
+  <publishOdomTF>true</publishOdomTF>
+  <publishWheelJointState>true</publishWheelJointState>
+  <wheelAcceleration>false</wheelAcceleration>
+  <odometrySource>world</odometrySource>
+  <publishTf>1</publishTf>
+  </plugin>
 </gazebo>
 
 

@@ -10,9 +10,9 @@
 
   <!-- The robot_state_publisher reads the urdf from /robot_description parameter
        and listens to joint information on the /joint_states topic -->
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+  <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/> -->
 
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+  <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/> -->
   <!-- <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui"/> -->
   <!-- rviz will enable us to see the robot -->
   <!-- <node name="rviz" pkg="rviz" type="rviz"/> -->
