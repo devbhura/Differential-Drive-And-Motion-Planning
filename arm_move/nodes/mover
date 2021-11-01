@@ -131,11 +131,11 @@ class Mover():
         z = req.point.z
         xyz = [x,y,z]
         self.move_group.set_position_target(xyz)
-
+        rospy.logerr(xyz)
         
 
         [err, plan_msg, plan_time, error_code] = self.move_group.plan()
-        
+        rospy.logerr(err)
         if error_code.val == 1:
 
             self.move_group.execute(plan_msg,wait='true')
