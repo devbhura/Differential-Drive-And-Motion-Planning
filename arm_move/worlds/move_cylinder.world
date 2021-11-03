@@ -87,45 +87,6 @@
       <elevation>0</elevation>
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
-    <state world_name='default'>
-      <sim_time>3 213000000</sim_time>
-      <real_time>3 219653651</real_time>
-      <wall_time>1635895767 929334283</wall_time>
-      <iterations>3213</iterations>
-      <model name='ground_plane'>
-        <pose>0 0 0 0 -0 0</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose>0 0 0 0 -0 0</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='pick_up_object'>
-        <pose>0.186178 0 0.10466 0 -0 0</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose>0.186178 0 0.10466 0 -0 0</pose>
-          <velocity>5.4e-05 -2e-06 0.009508 8.8e-05 0.002153 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='realsense_box'>
-        <pose>0.17292 0 0.025 0 -0 0</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose>0.17292 0 0.025 0 -0 0</pose>
-          <velocity>-0 0 0 0 -0 0</velocity>
-          <acceleration>-0 -0 0 0 -0 0</acceleration>
-          <wrench>-0 -0 0 0 -0 0</wrench>
-        </link>
-      </model>
-      <light name='sun'>
-        <pose>0 0 10 0 -0 0</pose>
-      </light>
-    </state>
     <model name='realsense_box'>
       <link name='link'>
         <inertial>
@@ -226,26 +187,58 @@
       </link>
       <static>0</static>
       <allow_auto_disable>1</allow_auto_disable>
-      <pose>0.217932 -0.002215 0 0 -0 0</pose>
+      <pose>0.732709 -0.054333 0 0 -0 0</pose>
     </model>
-    <gui fullscreen='0'>
-      <camera name='user_camera'>
-        <pose>0.029538 -0.062274 0.714467 3.14159 1.57079 3.14159</pose>
-        <view_controller>orbit</view_controller>
-        <projection_type>perspective</projection_type>
-      </camera>
-    </gui>
-    <model name='pick_up_object'>
+    <state world_name='default'>
+      <sim_time>38 314000000</sim_time>
+      <real_time>38 473882182</real_time>
+      <wall_time>1635898887 502701464</wall_time>
+      <iterations>38314</iterations>
+      <model name='ground_plane'>
+        <pose>0 0 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>0 0 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='object'>
+        <pose>0.3 0 0.08 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>0.3 0 0.08 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='realsense_box'>
+        <pose>0.3 0 0.025 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>0.3 0 0.025 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>-0 -0 0 0 -0 0</acceleration>
+          <wrench>-0 -0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <light name='sun'>
+        <pose>0 0 10 0 -0 0</pose>
+      </light>
+    </state>
+    <model name='object'>
       <link name='link'>
         <inertial>
-          <mass>0</mass>
+          <mass>0.005</mass>
           <inertia>
-            <ixx>0</ixx>
+            <ixx>0.00072917</ixx>
             <ixy>0</ixy>
             <ixz>0</ixz>
-            <iyy>0</iyy>
+            <iyy>0.00072917</iyy>
             <iyz>0</iyz>
-            <izz>0</izz>
+            <izz>0.000625</izz>
           </inertia>
           <pose>0 0 0 0 -0 0</pose>
         </inertial>
@@ -258,7 +251,7 @@
           <geometry>
             <cylinder>
               <radius>0.01</radius>
-              <length>0.05</length>
+              <length>0.04</length>
             </cylinder>
           </geometry>
           <material>
@@ -285,7 +278,7 @@
           <geometry>
             <cylinder>
               <radius>0.01</radius>
-              <length>0.05</length>
+              <length>1.79769e+308</length>
             </cylinder>
           </geometry>
           <surface>
@@ -337,7 +330,14 @@
       </link>
       <static>0</static>
       <allow_auto_disable>1</allow_auto_disable>
-      <pose>0.1 0.1 0.1 0 -0 0</pose>
+      <pose>0.727288 -1.36346 0.5 0 -0 0</pose>
     </model>
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>0.613644 -0.319728 0.273722 0 0.275643 2.35619</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
   </world>
 </sdf>

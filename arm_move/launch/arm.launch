@@ -15,7 +15,7 @@
   <arg name="use_gazebo"                        default="false"/>
   <arg name="use_actual"                        default="false"/>
   <arg name="use_fake"                          default="false"/>
-  <arg name="dof"                               default="5"/>
+  <arg name="dof"                               default="4"/>
   <arg name="world_name"                        default="$(find interbotix_xsarm_gazebo)/worlds/xsarm_gazebo.world"/>
 
   <node name="mover" pkg="arm_move" type="mover" ns="px100">
