@@ -1,5 +1,6 @@
 <launch>
 
+  <rosparam command="load" file="$(find arm_move)/config/waypoints.yaml"/>
   <arg name="robot_model"                       default="px100"/>
   <arg name="robot_name"                        default="$(arg robot_model)"/>
   <arg name="base_link_frame"                   default="base_link"/>
@@ -22,7 +23,7 @@
   <env name="GAZEBO_RESOURCE_PATH"              value="$(find interbotix_xsarm_gazebo)"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name"                        value="$(find arm_move)/worlds/realsense_box.world"/>
+    <arg name="world_name"                        value="$(find arm_move)/worlds/move_cylinder.world"/>
     <arg name="gui"                               value="$(arg gui)" />
     <arg name="debug"                             value="$(arg debug)" />
     <arg name="paused"                            value="$(arg paused)"/>
@@ -107,6 +108,6 @@
     ns="$(arg robot_name)"
 	  args="-urdf -model $(arg robot_model) -param robot_description"/>
 
-  
+  <rosparam command="load" file="$(find arm_move)/config/waypoints.yaml"/>
 
 </launch>

@@ -1,5 +1,7 @@
 <launch>
 
+  <rosparam command="load" file="$(find arm_move)/config/waypoints.yaml"/>
+  
   <arg name="robot_model"                       default="px100"/>
   <arg name="robot_name"                        default="$(arg robot_model)"/>
   <arg name="base_link_frame"                   default="base_link"/>
@@ -16,6 +18,11 @@
   <arg name="dof"                               default="5"/>
   <arg name="world_name"                        default="$(find interbotix_xsarm_gazebo)/worlds/xsarm_gazebo.world"/>
 
+  <node name="mover" pkg="arm_move" type="mover" ns="px100">
+    <remap from="/attached_collision_object" to="/$(arg robot_name)/attached_collision_object"/>
+    <remap from="/collision_object" to="/$(arg robot_name)/collision_object"/>
+  </node>
+
   <include if="$(arg use_gazebo)" file="$(find interbotix_xsarm_gazebo)/launch/xsarm_gazebo.launch">
     <arg name="robot_model"                       value="$(arg robot_model)"/>
     <arg name="robot_name"                        value="$(arg robot_name)"/>
@@ -23,9 +30,10 @@
     <arg name="show_ar_tag"                       value="$(arg show_ar_tag)"/>
     <arg name="use_world_frame"                   value="$(arg use_world_frame)"/>
     <arg name="external_urdf_loc"                 value="$(arg external_urdf_loc)"/>
-    <arg name="world_name"                        value="$(arg world_name)"/>
+    <arg name="world_name"                        value="$(find arm_move)/worlds/move_cylinder.world"/>
     <arg name="use_trajectory_controllers"        value="true"/>
   </include>
+
 
   <include if="$(arg use_actual)" file="$(find interbotix_xsarm_ros_control)/launch/xsarm_ros_control.launch">
     <arg name="robot_model"                       value="$(arg robot_model)"/>
@@ -68,8 +76,5 @@
     <arg name="config"                            value="true"/>
   </include>
 
-  <node name="mover" pkg="arm_move" type="mover" ns="px100">
-  <remap from="/attached_collision_object" to="/$(arg robot_name)/attached_collision_object"/>
-  <remap from="/collision_object" to="/$(arg robot_name)/collision_object"/>
-  </node>
+  
 </launch>

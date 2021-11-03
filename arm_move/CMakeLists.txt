@@ -56,6 +56,8 @@ find_package(catkin REQUIRED COMPONENTS
  add_service_files(
    FILES
    step.srv
+   reset.srv
+   follow.srv
  )
 
 ## Generate actions in the 'action' folder
@@ -69,7 +71,8 @@ find_package(catkin REQUIRED COMPONENTS
  generate_messages(
    DEPENDENCIES 
    geometry_msgs 
-   moveit_msgs   # Or other packages containing msgs
+   moveit_msgs 
+     # Or other packages containing msgs
  )
 
 ################################################

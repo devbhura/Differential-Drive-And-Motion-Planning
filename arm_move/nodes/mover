@@ -6,9 +6,9 @@ Subscriber:
 Publisher:
 
 Services:
-follow
-reset
-step
+    follow 
+    reset
+    step
 
 """
 
@@ -18,17 +18,16 @@ import rospy
 import moveit_commander
 import moveit_msgs.msg
 import os
+import yaml
 
 from geometry_msgs.msg import PoseStamped, Point, Pose
 from moveit_msgs.msg import MoveItErrorCodes
 from std_srvs.srv import Empty, EmptyResponse
-from arm_move.srv import step
+from arm_move.srv import step, reset, follow
 
 class Mover():
 
     def __init__(self):
-
-        # self.waypoints = rospy.get_param()
 
         moveit_commander.roscpp_initialize(sys.argv)
 
@@ -40,10 +39,14 @@ class Mover():
 
         self.gripper_group = moveit_commander.MoveGroupCommander("interbotix_gripper")
 
-        self.follow = rospy.Service("follow",Empty,self.follow_callback)
-        self.reset = rospy.Service("reset", Empty, self.reset_callback)
-        self.step = rospy.Service("step",step,self.step_callback)
+        self.follow = rospy.Service("follow",follow, self.follow_callback)
+        self.reset = rospy.Service("reset", reset, self.reset_callback)
+        self.step = rospy.Service("step",step, self.step_callback)
 
+        self.waypoints = rospy.get_param('/waypoints')
+        # self.dir = os.path.realpath('..')
+        # print(self.dir)
+        # self.yml = os.path.join(self.dir, '/config/waypoints.yaml')
         self.addtable()
 
         
@@ -105,23 +108,44 @@ class Mover():
         while not self.wait_for_state_update(box_is_known = True):
             self.scene.add_box(self.box_name, self.box_pose, size=(0.1, 0.1, 0.1))
 
-    def follow_callback(self):
+    def addobject(self):
+
+        rospy.sleep(3)
+        self.box_pose = PoseStamped()
+        self.box_pose.header.frame_id = "world"
+        self.box_pose.pose.orientation.w = 1.0
+        self.box_pose.pose.position.x = 0.1
+        self.box_pose.pose.position.y = 0.1
+        self.box_pose.pose.position.z = 0.1  # above the world frame
+        self.box_name = "object"
+
+        while not self.wait_for_state_update(box_is_known = True):
+            self.scene.add_cylinder(self.box_name, self.box_pose, height = 0.04, radius = 0.01)
+
+    def follow_callback(self, req):
+
+        for i in range(req.iter):
+            for i in self.waypoints:
+                self.move_group.set_position_target(i)
+                self.move_group.go()
 
 
-        return EmptyResponse()
+        
     
-    def reset_callback(self, timeout=4):
+    def reset_callback(self, req, timeout=4):
 
         # adds the box to the scene
         self.addbox()
+        self.addobject()
 
         # makes the robot go to its home position
         self.move_group.set_named_target('Home')
         self.move_group.go()
 
-        self.waypoints = []
+        if req.clear_waypoints:
+            self.waypoints = []   
 
-        return EmptyResponse()
+        
 
     
     def step_callback(self, req):
@@ -141,12 +165,17 @@ class Mover():
             self.move_group.execute(plan_msg,wait='true')
             self.move_group.go(wait='true')
             self.waypoints.append(xyz)
-            if req.gripper:
-                self.gripper_group.set_named_target('Open')
+            if req.gripper_pose:
+                self.gripper_group.set_named_target('Closed')
             else:
-                self.gripper_group.set_named_target(' Closed')
-
+                self.gripper_group.set_named_target('Open')
+            
+            rospy.set_param('waypoints',self.waypoints)
         
+        # file = open(self.yml,"w")
+        # dictionary = {"waypoints":self.waypoints}
+        # yaml.dump(dictionary,file)
+        # file.close()
 
         return error_code
 
