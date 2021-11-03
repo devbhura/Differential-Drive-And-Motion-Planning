@@ -39,6 +39,7 @@ class Mover():
 
         self.gripper_group = moveit_commander.MoveGroupCommander("interbotix_gripper")
 
+        # rospy.sleep(3)
         self.follow = rospy.Service("follow",follow, self.follow_callback)
         self.reset = rospy.Service("reset", reset, self.reset_callback)
         self.step = rospy.Service("step",step, self.step_callback)
@@ -82,7 +83,7 @@ class Mover():
 
     def addtable(self):
 
-        rospy.sleep(3)
+        # rospy.sleep(1)
         self.box_pose = PoseStamped()
         self.box_pose.header.frame_id = "world"
         self.box_pose.pose.orientation.w = 1.0
@@ -96,7 +97,7 @@ class Mover():
 
     def addbox(self):
 
-        rospy.sleep(3)
+        # rospy.sleep(1)
         self.box_pose = PoseStamped()
         self.box_pose.header.frame_id = "world"
         self.box_pose.pose.orientation.w = 1.0
@@ -110,7 +111,7 @@ class Mover():
 
     def addobject(self):
 
-        rospy.sleep(3)
+        # rospy.sleep(1)
         self.box_pose = PoseStamped()
         self.box_pose.header.frame_id = "world"
         self.box_pose.pose.orientation.w = 1.0
@@ -124,14 +125,16 @@ class Mover():
 
     def follow_callback(self, req):
 
+        
         for i in range(req.iter):
             for i in self.waypoints:
+                rospy.sleep(1)
                 rospy.logerr(i)
                 self.move_group.set_position_target(i[0:3])
                 self.move_group.go()
                 self.gripper_group.set_named_target(i[3])
                 self.gripper_group.go()
-                rospy.sleep(1)
+                
 
         return []
 
@@ -172,14 +175,14 @@ class Mover():
             
             if req.gripper_pose:
                 self.gripper_group.set_named_target('Closed')
-                list = xyz.append('Closed')
+                str = 'Closed'
             else:
                 self.gripper_group.set_named_target('Open')
-                list = xyz.append('Open')
+                str = 'Open'
             
-            
+            list = xyz.append(str)
             self.waypoints.append(list)
-            rospy.set_param('waypoints',self.waypoints)
+            # rospy.set_param('waypoints',self.waypoints)
         
         # file = open(self.yml,"w")
         # dictionary = {"waypoints":self.waypoints}

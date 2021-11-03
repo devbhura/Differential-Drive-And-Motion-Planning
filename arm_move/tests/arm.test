@@ -1,0 +1,14 @@
+<launch>
+
+    <include file="$(find arm_move)/launch/arm.launch">
+    <arg name="robot_model"  value="px100"/>
+    <arg name="use_fake"   value="true"/>
+    <arg name="use_moveit_rviz" value="true"/>
+  </include>
+
+    <!-- <node name="mover" pkg="arm_move" type="mover" ns="px100">
+    <remap from="/attached_collision_object" to="/$(arg robot_name)/attached_collision_object"/>
+    <remap from="/collision_object" to="/$(arg robot_name)/collision_object"/>
+  </node> -->
+    <test test-name="test" pkg="arm_move" type="test.py" />
+</launch>
