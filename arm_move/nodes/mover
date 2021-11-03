@@ -126,12 +126,16 @@ class Mover():
 
         for i in range(req.iter):
             for i in self.waypoints:
-                self.move_group.set_position_target(i)
+                rospy.logerr(i)
+                self.move_group.set_position_target(i[0:3])
                 self.move_group.go()
+                self.gripper_group.set_named_target(i[3])
+                self.gripper_group.go()
+                rospy.sleep(1)
+
+        return []
 
 
-        
-    
     def reset_callback(self, req, timeout=4):
 
         # adds the box to the scene
@@ -145,6 +149,7 @@ class Mover():
         if req.clear_waypoints:
             self.waypoints = []   
 
+        return []
         
 
     
@@ -155,21 +160,25 @@ class Mover():
         z = req.point.z
         xyz = [x,y,z]
         self.move_group.set_position_target(xyz)
-        rospy.logerr(xyz)
+        # rospy.logerr(xyz)
         
 
         [err, plan_msg, plan_time, error_code] = self.move_group.plan()
-        rospy.logerr(err)
+        # rospy.logerr(err)
         if error_code.val == 1:
 
             self.move_group.execute(plan_msg,wait='true')
-            self.move_group.go(wait='true')
-            self.waypoints.append(xyz)
+            self.move_group.go()
+            
             if req.gripper_pose:
                 self.gripper_group.set_named_target('Closed')
+                list = xyz.append('Closed')
             else:
                 self.gripper_group.set_named_target('Open')
+                list = xyz.append('Open')
             
+            
+            self.waypoints.append(list)
             rospy.set_param('waypoints',self.waypoints)
         
         # file = open(self.yml,"w")
