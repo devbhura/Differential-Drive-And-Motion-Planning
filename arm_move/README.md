@@ -16,8 +16,9 @@ Follow: Takes in number of iteration and loops through following the successful 
 Step: Takes the x,y,z coordinates of the desired end effector location and returns whether you can successfully go there or not. It executes the path if it is successful. 
 
 The demo in gazebo and real life are shown below:
+![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/55405657/140261289-c2da3b1b-ed27-4b9c-9178-bf43340aed3a.gif)
 
-
+![ezgif com-gif-maker (4)](https://user-images.githubusercontent.com/55405657/140261279-9d8f54c9-4652-4c2f-b821-5a8e52c9ec77.gif)
 
 
 TESTING:
