@@ -23,7 +23,7 @@ import yaml
 from geometry_msgs.msg import PoseStamped, Point, Pose
 from moveit_msgs.msg import MoveItErrorCodes
 from std_srvs.srv import Empty, EmptyResponse
-from arm_move.srv import step, reset, follow
+from arm_move.srv import step, reset, follow, stepResponse, resetResponse, followResponse
 
 class Mover():
 
@@ -101,7 +101,7 @@ class Mover():
         self.box_pose = PoseStamped()
         self.box_pose.header.frame_id = "world"
         self.box_pose.pose.orientation.w = 1.0
-        self.box_pose.pose.position.x = 0.2
+        self.box_pose.pose.position.x = 0.15
         self.box_pose.pose.position.y = 0.0
         self.box_pose.pose.position.z = 0.05  # above the world frame
         self.box_name = "box"
@@ -128,7 +128,7 @@ class Mover():
         
         for i in range(req.iter):
             for i in self.waypoints:
-                rospy.sleep(1)
+                # rospy.sleep(1)
                 rospy.logerr(i)
                 self.move_group.set_position_target(i[0:3])
                 self.move_group.go()
@@ -136,7 +136,7 @@ class Mover():
                 self.gripper_group.go()
                 
 
-        return []
+        return followResponse()
 
 
     def reset_callback(self, req, timeout=4):
@@ -148,11 +148,13 @@ class Mover():
         # makes the robot go to its home position
         self.move_group.set_named_target('Home')
         self.move_group.go()
+        self.gripper_group.set_named_target('Open')
+        self.gripper_group.go()
 
         if req.clear_waypoints:
             self.waypoints = []   
 
-        return []
+        return resetResponse()
         
 
     
@@ -180,9 +182,10 @@ class Mover():
                 self.gripper_group.set_named_target('Open')
                 str = 'Open'
             
-            list = xyz.append(str)
-            self.waypoints.append(list)
-            # rospy.set_param('waypoints',self.waypoints)
+            xyz.append(str)
+            self.waypoints.append(xyz)
+            rospy.logerr(self.waypoints)
+            rospy.set_param('waypoints',self.waypoints)
         
         # file = open(self.yml,"w")
         # dictionary = {"waypoints":self.waypoints}
