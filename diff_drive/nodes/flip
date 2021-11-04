@@ -4,9 +4,9 @@
 Makes the robot move forward and backwards and flip
 
 Publishers: 
+diff/cmd_vel (Twist): publish velocity to differential drive
 
 
-Subscribers:
 """
 
 import rospy 
@@ -15,6 +15,8 @@ from geometry_msgs.msg import Twist, Vector3
 class Flip():
 
     def __init__(self):
+        """ Makes the diff drive robot flip by inverting the velocity signs every few seconds
+        """
 
         # Publishes to diff/cmd_vel
         self.wheel_pub = rospy.Publisher("diff/cmd_vel", Twist, queue_size = 10)

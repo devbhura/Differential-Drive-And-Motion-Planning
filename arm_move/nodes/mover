@@ -1,14 +1,20 @@
 #!/usr/bin/env python
 
 """
-Subscriber:
+Description:
+This node has 3 services that allows one to control the Interbotix px100 
+robot arm, to pick and place an object without colliding into objects and 
+follow waypoints, using moveit!
 
-Publisher:
+
 
 Services:
-    follow 
-    reset
-    step
+    follow (follow): Follows waypoints in the waypoints parameter
+    reset (reset): resets the objects to its location and sets the 
+                    robot to its home setting
+    step (step): takes in specific point location and gripper pose 
+                 and return values that say whether the the point can be 
+                 reached or not
 
 """
 
@@ -28,7 +34,7 @@ from arm_move.srv import step, reset, follow, stepResponse, resetResponse, follo
 class Mover():
 
     def __init__(self):
-
+        # Initiliaze move it group to command robot and scenes
         moveit_commander.roscpp_initialize(sys.argv)
 
         self.robot = moveit_commander.RobotCommander()
@@ -40,22 +46,29 @@ class Mover():
         self.gripper_group = moveit_commander.MoveGroupCommander("interbotix_gripper")
 
         # rospy.sleep(3)
+        # create services follow, reset and step
         self.follow = rospy.Service("follow",follow, self.follow_callback)
         self.reset = rospy.Service("reset", reset, self.reset_callback)
         self.step = rospy.Service("step",step, self.step_callback)
 
+        # get waypoint parameter
         self.waypoints = rospy.get_param('/waypoints')
         # self.dir = os.path.realpath('..')
         # print(self.dir)
         # self.yml = os.path.join(self.dir, '/config/waypoints.yaml')
+
+        # spawn table
         self.addtable()
 
         
 
     def wait_for_state_update(self, box_is_known=False, box_is_attached=False, timeout=4):
-    # Copy class variables to local variables to make the web tutorials more clear.
-    # In practice, you should use the class variables directly unless you have a good
-    # reason not to.
+        """This functions waits for the objects to load onto the scene 
+            Adapted from the moveit api
+            Args:
+            box_is_known (bool): whether the box is known to exist or not
+            box_is_attached (bool): to see if the box is attached to the robot
+        """
         box_name = self.box_name
         scene = self.scene
         start = rospy.get_time()
@@ -82,7 +95,10 @@ class Mover():
 
 
     def addtable(self):
+        """ Adds table below the robot in rviz scene
+            Args: None
 
+        """
         # rospy.sleep(1)
         self.box_pose = PoseStamped()
         self.box_pose.header.frame_id = "world"
@@ -96,7 +112,9 @@ class Mover():
             self.scene.add_box(self.box_name, self.box_pose, size=(0.5, 0.5, 0.01))
 
     def addbox(self):
-
+        """ Adds box to the predetermined position and orientation onto the scene
+            Args: None
+        """
         # rospy.sleep(1)
         self.box_pose = PoseStamped()
         self.box_pose.header.frame_id = "world"
@@ -110,7 +128,9 @@ class Mover():
             self.scene.add_box(self.box_name, self.box_pose, size=(0.1, 0.1, 0.1))
 
     def addobject(self):
-
+        """ Adds object to the predetermined position and orientation onto the scene
+            Args: None
+        """
         # rospy.sleep(1)
         self.box_pose = PoseStamped()
         self.box_pose.header.frame_id = "world"
@@ -124,7 +144,11 @@ class Mover():
             self.scene.add_cylinder(self.box_name, self.box_pose, height = 0.04, radius = 0.01)
 
     def follow_callback(self, req):
-
+        """ Follows waypoints that are set to the waypoints
+            Args: 
+            iter (int): the number of times you want the robot to follow all waypoints
+            returns: []
+        """
         
         for i in range(req.iter):
             for i in self.waypoints:
@@ -140,7 +164,12 @@ class Mover():
 
 
     def reset_callback(self, req, timeout=4):
-
+        """ Resets the scene by spawning the objects to the scene 
+            Args: 
+            clear_waypoints (bool): whether to clear waypoints that are loaded onto the parameter 
+                                    or not
+            returns: []
+        """
         # adds the box to the scene
         self.addbox()
         self.addobject()
@@ -159,7 +188,15 @@ class Mover():
 
     
     def step_callback(self, req):
+        """ Checks if a position can be reached and returns if its a success or not
+            It goes to that position if it can be reached
+            Args: 
+            position (Point): the x,y,z coordinates of the point to be reached 
+            gripper_pose (bool): whether the gripper should be closed or open
+            returns:
+            error (MoveItErrorCodes): returns val with -1 if failure and 1 if success
 
+        """
         x = req.point.x
         y = req.point.y
         z = req.point.z
